@@ -49,7 +49,7 @@ namespace CopyDbConsole
                     if (foundRows.Length == 0)
                     {
                         Console.WriteLine($"La tabla {TableName} no se ha encontrado en el destino");
-                        Console.ReadLine();
+                        Console.ReadLine();                        
                         return;
                     }
                     else {
@@ -67,14 +67,15 @@ namespace CopyDbConsole
                 SqlDataReader DrOrigin = CmdOr.ExecuteReader();
                 SqlCommand CmdDest = new SqlCommand($"SELECT TOP 1 * FROM {TableName}", DestSqlCon);
                 SqlDataReader DrDest = CmdDest.ExecuteReader();
-                if (DrOrigin.FieldCount != DrDest.FieldCount) {
-                    Console.WriteLine($"No existe el mismo número de campos en la tabla {TableName}");
-                    DrOrigin.Close();
-                    DrDest.Close();
-                    OriginSqlCon.Close();
-                    DestSqlCon.Close();
-                    return;
-                }
+                //if (DrOrigin.FieldCount != DrDest.FieldCount) {
+                //    Console.WriteLine($"No existe el mismo número de campos en la tabla {TableName}");
+                //    DrOrigin.Close();
+                //    DrDest.Close();
+                //    OriginSqlCon.Close();
+                //    DestSqlCon.Close();
+                //    Console.ReadLine();
+                //    return;
+                //}
                 DataTable DtFieldsOrigin = DrOrigin.GetSchemaTable();
                 DataTable DtFieldsDest = DrOrigin.GetSchemaTable();
                 for(int Ci = 0; Ci < DtFieldsOrigin.Rows.Count; Ci++)
@@ -86,6 +87,7 @@ namespace CopyDbConsole
                         DrDest.Close();
                         OriginSqlCon.Close();
                         DestSqlCon.Close();
+                        Console.ReadLine();
                         return;
                     }
                     else
