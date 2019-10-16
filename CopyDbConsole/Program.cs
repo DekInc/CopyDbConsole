@@ -63,7 +63,7 @@ namespace CopyDbConsole
                 ListTableFields.Add(TableName, "");
                 OriginSqlCon.Open();
                 DestSqlCon.Open();
-                SqlCommand CmdOr = new SqlCommand($"SELECT * FROM {TableName}", OriginSqlCon);
+                SqlCommand CmdOr = new SqlCommand($"SELECT top 1 * FROM {TableName}", OriginSqlCon);
                 SqlDataReader DrOrigin = CmdOr.ExecuteReader();
                 SqlCommand CmdDest = new SqlCommand($"SELECT TOP 1 * FROM {TableName}", DestSqlCon);
                 SqlDataReader DrDest = CmdDest.ExecuteReader();
@@ -121,28 +121,28 @@ namespace CopyDbConsole
             }
             ListVerifExistTablesFields.ForEach(T => Console.WriteLine(T));
             Console.WriteLine("PASO 2 - COPIANDO LOS DATOS DE ORIGEN HACIA EL DESTINO");
-            Console.WriteLine("Borrando destino");
-            foreach (string TableName in ListTables)
-            {
-                DestSqlCon.Open();
-                SqlCommand CmdDest = new SqlCommand($"TRUNCATE TABLE {TableName}", DestSqlCon);
-                CmdDest.ExecuteNonQuery();                
-                DestSqlCon.Close();
-            }
-            foreach (string TableName in ListTables)
-            {
-                //if (TableName != "EdiComs")
-                //{
-                    Console.WriteLine("Insertando datos de tabla " + TableName);
-                    DestSqlCon.Open();
-                    foreach (Tuple<string, string> Data in ListData.Where(D => D.Item1 == TableName))
-                    {
-                        SqlCommand CmdDest = new SqlCommand($"INSERT INTO {TableName}({ListTableFields[TableName]}) VALUES ({Data.Item2})", DestSqlCon);
-                        CmdDest.ExecuteNonQuery();
-                    }
-                    DestSqlCon.Close();
-                //}
-            }
+            //Console.WriteLine("Borrando destino");
+            //foreach (string TableName in ListTables)
+            //{
+            //    DestSqlCon.Open();
+            //    SqlCommand CmdDest = new SqlCommand($"TRUNCATE TABLE {TableName}", DestSqlCon);
+            //    CmdDest.ExecuteNonQuery();                
+            //    DestSqlCon.Close();
+            //}
+            //foreach (string TableName in ListTables)
+            //{
+            //    //if (TableName != "EdiComs")
+            //    //{
+            //        Console.WriteLine("Insertando datos de tabla " + TableName);
+            //        DestSqlCon.Open();
+            //        foreach (Tuple<string, string> Data in ListData.Where(D => D.Item1 == TableName))
+            //        {
+            //            SqlCommand CmdDest = new SqlCommand($"INSERT INTO {TableName}({ListTableFields[TableName]}) VALUES ({Data.Item2})", DestSqlCon);
+            //            CmdDest.ExecuteNonQuery();
+            //        }
+            //        DestSqlCon.Close();
+            //    //}
+            //}
             Console.WriteLine("Presione una tecla para terminar");
             Console.ReadLine();
         }
